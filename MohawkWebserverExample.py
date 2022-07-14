@@ -78,16 +78,29 @@ class MohawkWebServer:
     def reset_pins(self):
         return requests.post(self.__constructUrl('reset_pins')).json()
     
-    
-    #def scan_container(self, container_id, 
-    #                   retrieve_raw_image=False, 
-    #                   retrieve_annotated_image=False, 
-    #                  retrieve_1dr2_image=False):
-    #    params = {'container_uid' : container_id, 
-    #              'raw_image' : str(retrieve_raw_image).lower(),
-    #              'annotated_image' : str(retrieve_raw_image).lower(),
-    #              '1dr2_image' : str(retrieve_1dr2_image).lower()}
-    #    return requests.post(self.__constructUrl('scan'), params=params).json()
+    '''set pins up for Mohawk'''
+    @property
+    def pins_up(self):
+        pinsObj = [{'row': 1,'column': 1},{'row': 3,'column': 3}]
+        return requests.post(self.__constructUrl('pins_up'),json=pinsObj).json()
+
+    '''configure reader for Mohawk'''
+    @property
+    def configure_reader(self):
+        readerObj = {"type": "ZIATH"}
+        return requests.post(self.__constructUrl('reader'),json=readerObj).json()
+
+    '''read barcode from Mohawk'''
+    @property
+    def read_barcode(self):
+        return requests.post(self.__constructUrl('read_barcode')).json()
+
+    '''set rack barcode for Mohawk'''
+    @property
+    def set_rack_barcode(self):
+        rackLoaderObj = {"rack_barcode": "001","reset_pins": True}
+        return requests.post(self.__constructUrl('set_rack_barcode'),json=rackLoaderObj).json()
+        
 
 if __name__ == '__main__':
     
@@ -104,6 +117,10 @@ if __name__ == '__main__':
     print ('temperature = ' + str(mohawkWebServer.temperature))
     print ('pins status = ' + str(mohawkWebServer.pins_status))
     print ('reset pins = ' + str(mohawkWebServer.reset_pins))
+    print ('pins up = ' + str(mohawkWebServer.pins_up))
+    print ('Configure Reader = ' + str(mohawkWebServer.configure_reader))
+    print ('Read Barcode = ' + str(mohawkWebServer.read_barcode))
+    print ('Set Rack Barcode = ' + str(mohawkWebServer.set_rack_barcode))
 
     
     

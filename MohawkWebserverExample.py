@@ -102,6 +102,16 @@ class MohawkWebServer:
         rackLoaderObj = {"rack_barcode": "001","reset_pins": True}
         return requests.post(self.__constructUrl('set_rack_barcode'),json=rackLoaderObj).json()
     
+    '''get worklist for Mohawk'''
+    @property
+    def get_worklist(self):
+        return requests.get(self.__constructUrl('worklist')).json()
+    
+    '''get worklist status for Mohawk'''
+    @property
+    def worklist_status(self):
+        return requests.get(self.__constructUrl('worklist/status')).json()
+    
     '''load Json worklist for Mohawk'''
     @property
     def load_worklist(self):
@@ -134,7 +144,21 @@ class MohawkWebServer:
         with open(template_path, 'rb') as f:
             data = f.read()
         return requests.post(self.__constructUrl('worklist/load_csv'),data = data,headers={'Content-Type': 'text/csv'}).json()
-
+    
+    '''finish worklist for Mohawk'''
+    @property
+    def finish_worklist(self):
+        return requests.post(self.__constructUrl('worklist/finish')).json()
+    
+    '''shutdown Mohawk'''
+    @property
+    def shutdown(self):
+        return requests.post(self.__constructUrl('shutdown')).json()
+    
+    '''force shutdown Mohawk'''
+    @property
+    def force_shutdown(self):
+        return requests.post(self.__constructUrl('force_shutdown')).json()
 
 if __name__ == '__main__':
     
@@ -155,10 +179,15 @@ if __name__ == '__main__':
     print ('Configure Reader = ' + str(mohawkWebServer.configure_reader))
     print ('Read Barcode = ' + str(mohawkWebServer.read_barcode))
     print ('Set Rack Barcode = ' + str(mohawkWebServer.set_rack_barcode))
+    print ('Worklist = ' + str(mohawkWebServer.get_worklist))
+    print ('Worklist Status = ' + str(mohawkWebServer.worklist_status))
     print ('Load Worklist Json = ' + str(mohawkWebServer.load_worklist))
     print ('Load Worklist Excel = ' + str(mohawkWebServer.load_worklist_excel))
     print ('Load Worklist Xml = ' + str(mohawkWebServer.load_worklist_xml))
     print ('Load Worklist Csv = ' + str(mohawkWebServer.load_worklist_csv))
+    print ('Finish Worklist = ' + str(mohawkWebServer.finish_worklist))
+    print ('ShutDown Mohawk = ' + str(mohawkWebServer.shutdown))
+    print ('Force ShutDown Mohawk = ' + str(mohawkWebServer.force_shutdown))
 
     
     

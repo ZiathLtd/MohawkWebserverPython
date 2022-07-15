@@ -102,13 +102,13 @@ class MohawkWebServer:
         rackLoaderObj = {"rack_barcode": "001","reset_pins": True}
         return requests.post(self.__constructUrl('set_rack_barcode'),json=rackLoaderObj).json()
     
-    '''set load worklist for Mohawk'''
+    '''load Json worklist for Mohawk'''
     @property
     def load_worklist(self):
         worklistObj = [{"rack_barcode": "001","row": 1, "column": 1},{"rack_barcode": "002","row": 3,"column": 1},{"rack_barcode": "002","row": 1,"column": 4},{"rack_barcode": "001","row": 3,"column": 3}]
         return requests.post(self.__constructUrl('worklist/load_json'),json=worklistObj).json()
         
-    '''set load worklist for Mohawk'''
+    '''load Excel worklist for Mohawk'''
     @property
     def load_worklist_excel(self):
         script_dir=Path(__file__).parent 
@@ -117,7 +117,7 @@ class MohawkWebServer:
             data = f.read()
         return requests.post(self.__constructUrl('worklist/load_excel'),data = data,headers={'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}).json()
 
-    '''set load worklist for Mohawk'''
+    '''load XML worklist for Mohawk'''
     @property
     def load_worklist_xml(self):
         script_dir=Path(__file__).parent 
@@ -126,7 +126,7 @@ class MohawkWebServer:
             data = f.read()
         return requests.post(self.__constructUrl('worklist/load_xml'),data = data,headers={'Content-Type': 'application/xml'}).json()
 
-    '''set load worklist for Mohawk'''
+    '''load Csv worklist for Mohawk'''
     @property
     def load_worklist_csv(self):
         script_dir=Path(__file__).parent 

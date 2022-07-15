@@ -1,5 +1,6 @@
 import json
 import requests
+from pathlib import Path
 
 '''This class details some baic functions of the MohawkWebServer API using Python.  There is a swagger page for further documentation
 at http://<host>:<port>/swagger-ui.html.
@@ -100,7 +101,40 @@ class MohawkWebServer:
     def set_rack_barcode(self):
         rackLoaderObj = {"rack_barcode": "001","reset_pins": True}
         return requests.post(self.__constructUrl('set_rack_barcode'),json=rackLoaderObj).json()
+    
+    '''set load worklist for Mohawk'''
+    @property
+    def load_worklist(self):
+        worklistObj = [{"rack_barcode": "001","row": 1, "column": 1},{"rack_barcode": "002","row": 3,"column": 1},{"rack_barcode": "002","row": 1,"column": 4},{"rack_barcode": "001","row": 3,"column": 3}]
+        return requests.post(self.__constructUrl('worklist/load_json'),json=worklistObj).json()
         
+    '''set load worklist for Mohawk'''
+    @property
+    def load_worklist_excel(self):
+        script_dir=Path(__file__).parent 
+        template_path=(script_dir/'picklistSample.xlsx').resolve()
+        with open(template_path, 'rb') as f:
+            data = f.read()
+        return requests.post(self.__constructUrl('worklist/load_excel'),data = data,headers={'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}).json()
+
+    '''set load worklist for Mohawk'''
+    @property
+    def load_worklist_xml(self):
+        script_dir=Path(__file__).parent 
+        template_path=(script_dir/'picklistSample.xml').resolve()
+        with open(template_path, 'rb') as f:
+            data = f.read()
+        return requests.post(self.__constructUrl('worklist/load_xml'),data = data,headers={'Content-Type': 'application/xml'}).json()
+
+    '''set load worklist for Mohawk'''
+    @property
+    def load_worklist_csv(self):
+        script_dir=Path(__file__).parent 
+        template_path=(script_dir/'picklistSample.csv').resolve()
+        with open(template_path, 'rb') as f:
+            data = f.read()
+        return requests.post(self.__constructUrl('worklist/load_csv'),data = data,headers={'Content-Type': 'text/csv'}).json()
+
 
 if __name__ == '__main__':
     
@@ -121,6 +155,10 @@ if __name__ == '__main__':
     print ('Configure Reader = ' + str(mohawkWebServer.configure_reader))
     print ('Read Barcode = ' + str(mohawkWebServer.read_barcode))
     print ('Set Rack Barcode = ' + str(mohawkWebServer.set_rack_barcode))
+    print ('Load Worklist Json = ' + str(mohawkWebServer.load_worklist))
+    print ('Load Worklist Excel = ' + str(mohawkWebServer.load_worklist_excel))
+    print ('Load Worklist Xml = ' + str(mohawkWebServer.load_worklist_xml))
+    print ('Load Worklist Csv = ' + str(mohawkWebServer.load_worklist_csv))
 
     
     

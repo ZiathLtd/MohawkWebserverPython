@@ -145,6 +145,44 @@ class MohawkWebServer:
             data = f.read()
         return requests.post(self.__constructUrl('worklist/load_csv'),data = data,headers={'Content-Type': 'text/csv'}).json()
     
+    '''get report in json Mohawk'''
+    @property
+    def get_report_json(self):
+        return requests.get(self.__constructUrl('report_to_json')).json()
+    
+    '''get report in xml for Mohawk'''
+    @property
+    def get_report_xml(self):
+        script_dir=Path(__file__).parent 
+        template_path=(script_dir/'picklistSample1.xml').resolve()
+        reportResponse= requests.get(self.__constructUrl('report_to_xml'))
+        attachment_data = reportResponse.content
+        with open(template_path, 'wb') as f:
+            f.write(attachment_data)
+        return "XML File Write Success"+str(template_path)
+    
+    '''get report in csv for Mohawk'''
+    @property
+    def get_report_csv(self):
+        script_dir=Path(__file__).parent 
+        template_path=(script_dir/'picklistSample1.csv').resolve()
+        reportResponse= requests.get(self.__constructUrl('report_to_csv'))
+        attachment_data = reportResponse.content
+        with open(template_path, 'wb') as f:
+            f.write(attachment_data)
+        return "CSV File Write Success"+str(template_path)
+    
+    '''get report in excel for Mohawk'''
+    @property
+    def get_report_excel(self):
+        script_dir=Path(__file__).parent 
+        template_path=(script_dir/'picklistSample1.xlsx').resolve()
+        reportResponse= requests.get(self.__constructUrl('report_to_excel'))
+        attachment_data = reportResponse.content
+        with open(template_path, 'wb') as f:
+            f.write(attachment_data)
+        return "Excel File Write Success"+str(template_path)
+    
     '''finish worklist for Mohawk'''
     @property
     def finish_worklist(self):
@@ -181,13 +219,17 @@ if __name__ == '__main__':
     print ('Set Rack Barcode = ' + str(mohawkWebServer.set_rack_barcode))
     print ('Worklist = ' + str(mohawkWebServer.get_worklist))
     print ('Worklist Status = ' + str(mohawkWebServer.worklist_status))
+    print ('Get Json Report = ' + str(mohawkWebServer.get_report_json))
+    print ('Get XML Report = ' + str(mohawkWebServer.get_report_xml))
+    print ('Get CSV Report = ' + str(mohawkWebServer.get_report_csv))
+    print ('Get Excel Report = ' + str(mohawkWebServer.get_report_excel))
     print ('Load Worklist Json = ' + str(mohawkWebServer.load_worklist))
     print ('Load Worklist Excel = ' + str(mohawkWebServer.load_worklist_excel))
     print ('Load Worklist Xml = ' + str(mohawkWebServer.load_worklist_xml))
     print ('Load Worklist Csv = ' + str(mohawkWebServer.load_worklist_csv))
     print ('Finish Worklist = ' + str(mohawkWebServer.finish_worklist))
-    print ('ShutDown Mohawk = ' + str(mohawkWebServer.shutdown))
-    print ('Force ShutDown Mohawk = ' + str(mohawkWebServer.force_shutdown))
+    #print ('ShutDown Mohawk = ' + str(mohawkWebServer.shutdown))
+    #print ('Force ShutDown Mohawk = ' + str(mohawkWebServer.force_shutdown))
 
     
     

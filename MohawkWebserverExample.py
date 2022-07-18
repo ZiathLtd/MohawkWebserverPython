@@ -1,11 +1,29 @@
-import json
 import requests
 from pathlib import Path
+import xml.etree.ElementTree as ET
+import threading
+import time
+import websocket 
 
 '''This class details some baic functions of the MohawkWebServer API using Python.  There is a swagger page for further documentation
 at http://<host>:<port>/swagger-ui.html.
 
 Note that this uses the external requests module so install that by executing 'pip install reqeusts' before running the code'''
+"""
+  Notification Server client example. Prints any server notification
+"""
+
+'''Prints the message received from Notification Server'''    
+def on_message(self,message):
+    print(message)
+
+def on_error(self,error):
+    print(error)
+
+def on_close(self):
+    print("### closed ###")
+
+
 class MohawkWebServer:
 
     def __init__(self):
@@ -203,6 +221,13 @@ if __name__ == '__main__':
     #Create the MohawkWebServer object, note that this expects the Mohawk service to be running
     #(assuming you are on English language windows and using a default install location)
     mohawkWebServer = MohawkWebServer()
+
+    # Start the Notification Client to recieve Notifications
+    websocket.enableTrace(True)
+    ws = websocket.WebSocketApp("ws://localhost:8025/mohawk/notifications", on_message = on_message, on_close = on_close)
+    wst = threading.Thread(target=ws.run_forever)
+    wst.daemon = True
+    wst.start()
     
     #obtain some basic information from the system
     print ('lid status = ' + str(mohawkWebServer.lid_status))
@@ -215,6 +240,17 @@ if __name__ == '__main__':
     print ('reset pins = ' + str(mohawkWebServer.reset_pins))
     print ('pins up = ' + str(mohawkWebServer.pins_up))
     print ('Configure Reader = ' + str(mohawkWebServer.configure_reader))
+    # Loading worklist in Json and then Finish the Worklist
+    print ('Load Worklist Json = ' + str(mohawkWebServer.load_worklist))
+    print ('Finish Worklist = ' + str(mohawkWebServer.finish_worklist))
+    # Loading another worklist in Json and then Finish the Worklist
+    print ('Load Worklist Excel = ' + str(mohawkWebServer.load_worklist_excel))
+    print ('Finish Worklist = ' + str(mohawkWebServer.finish_worklist))
+    # Loading another worklist in Json and then Finish the Worklist
+    print ('Load Worklist Xml = ' + str(mohawkWebServer.load_worklist_xml))
+    print ('Finish Worklist = ' + str(mohawkWebServer.finish_worklist))
+    # Loading another worklist in Json and then Finish the Worklist
+    print ('Load Worklist Csv = ' + str(mohawkWebServer.load_worklist_csv))
     print ('Read Barcode = ' + str(mohawkWebServer.read_barcode))
     print ('Set Rack Barcode = ' + str(mohawkWebServer.set_rack_barcode))
     print ('Worklist = ' + str(mohawkWebServer.get_worklist))
@@ -223,13 +259,13 @@ if __name__ == '__main__':
     print ('Get XML Report = ' + str(mohawkWebServer.get_report_xml))
     print ('Get CSV Report = ' + str(mohawkWebServer.get_report_csv))
     print ('Get Excel Report = ' + str(mohawkWebServer.get_report_excel))
-    print ('Load Worklist Json = ' + str(mohawkWebServer.load_worklist))
-    print ('Load Worklist Excel = ' + str(mohawkWebServer.load_worklist_excel))
-    print ('Load Worklist Xml = ' + str(mohawkWebServer.load_worklist_xml))
-    print ('Load Worklist Csv = ' + str(mohawkWebServer.load_worklist_csv))
-    print ('Finish Worklist = ' + str(mohawkWebServer.finish_worklist))
+    #asyncio.run(xmit_Loop())
     #print ('ShutDown Mohawk = ' + str(mohawkWebServer.shutdown))
     #print ('Force ShutDown Mohawk = ' + str(mohawkWebServer.force_shutdown))
+     # Play with the mohawk, for example with the lid to receive notifications
+    print("Open and close lid to see notifications. Process will be killed after 10 seconds")
+    time.sleep(10)
+  
 
     
     

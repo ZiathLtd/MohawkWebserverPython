@@ -205,6 +205,11 @@ class MohawkWebServer:
     @property
     def finish_worklist(self):
         return requests.post(self.__constructUrl('worklist/finish')).json()
+
+    '''cancel worklist for Mohawk'''
+    @property
+    def cancel_worklist(self):
+        return requests.post(self.__constructUrl('worklist/cancel')).json()
     
     '''shutdown Mohawk'''
     @property
@@ -248,7 +253,7 @@ if __name__ == '__main__':
     print ('Finish Worklist = ' + str(mohawkWebServer.finish_worklist))
     # Loading another worklist in Json and then Finish the Worklist
     print ('Load Worklist Xml = ' + str(mohawkWebServer.load_worklist_xml))
-    print ('Finish Worklist = ' + str(mohawkWebServer.finish_worklist))
+    print ('Cancel Worklist = ' + str(mohawkWebServer.cancel_worklist))
     # Loading another worklist in Json and then Finish the Worklist
     print ('Load Worklist Csv = ' + str(mohawkWebServer.load_worklist_csv))
     print ('Read Barcode = ' + str(mohawkWebServer.read_barcode))
